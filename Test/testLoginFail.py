@@ -3,15 +3,19 @@ from StuffTracker.models import Stuff, MyUser
 
 
 class LoginFail(TestCase):
+    monkey = None
+    thingList = None
+
     def setUp(self):
+        # completed
         self.monkey = Client()
         self.thingList = {"one": ["cat", "dog"], "two": ["cake"]}
-
-        for name, things in self.thingList.items():
-            user = MyUser(name=name, password=name)
-            user.save()
-            for thing in things:
-                Stuff(name=thing, owner=user).save()
+        # fill test database
+        for i in self.thingList.keys():
+            temp = MyUser(name=i, password=i)
+            temp.save()
+            for j in self.thingList[i]:
+                Stuff(name=j, owner=temp).save()
 
     def test_emptyPassword(self):
         for name in self.thingList:
